@@ -18,10 +18,9 @@ public class GameActivity extends AppCompatActivity {
 
 
     LinkedList<String> words;
+    LinkedList<Team> teams;
     TextView wordDisplay;
     TextView timerDisplay;
-    Iterator<String> iterator;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +28,10 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         Intent intent = getIntent();
-        int players = intent.getIntExtra("numberOfPlayers",2);
+        int numberOfTeams = intent.getIntExtra("numberOfPlayers",2);
         int diff = intent.getIntExtra("difficulty",2);
 
-        System.out.println("players: " + players);
+        System.out.println("players: " + numberOfTeams);
         System.out.println("diff: " + diff);
 
 
@@ -48,8 +47,7 @@ public class GameActivity extends AppCompatActivity {
                 break;
         }
         Collections.shuffle(words);
-       // iterator = words.listIterator();
-
+        teams = createTeams(numberOfTeams,0,false);
         start();
 
     }
@@ -74,6 +72,8 @@ public class GameActivity extends AppCompatActivity {
             }
 
         }.start();
+
+        System.out.println("after timer.");
 
     }
 
@@ -121,5 +121,14 @@ public class GameActivity extends AppCompatActivity {
             iterator = words.listIterator();
             wordDisplay.setText(iterator.next());
         }*/
+    }
+
+    private LinkedList<Team> createTeams(int numberOfTeams, int skips, boolean customTeamNames) {
+        LinkedList<Team> teams = new LinkedList<>();
+        for(;numberOfTeams>0; numberOfTeams--) {
+            Team t = new Team("Team "+numberOfTeams,skips,0);
+            teams.addLast(t);
+        }
+        return teams;
     }
 }

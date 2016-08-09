@@ -5,10 +5,17 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_pre_game_settings">preGameSettings</string>
 
-    <string-array name ="spinner_items">
+    <string-array name="diff_spinneritems">
         <item>Easy</item>
         <item>Default</item>
         <item>Hard</item>
+    </string-array>
+
+    <string-array name="skips_spinneritems">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
     </string-array>
 
 
@@ -32,6 +39,8 @@
         <item>Solglasögon</item>
         <item>Landskap</item>
         <item>Marijuana</item>
+        <item>Dagdröm</item>
+        <item>Arbetsplats</item>
     </string-array>
 
 
@@ -40,12 +49,9 @@
         <item>Dedikerad</item>
         <item>Skonsam</item>
         <item>Förklara</item>
-        <item>Marijuana</item>
-        <item>Dagdröm</item>
-        <item>Arbetsplats</item>
         <item>Extremt</item>
+        <item>Omen</item>
     </string-array>
-
 
 
     <!-- Strings related to Settings -->
@@ -105,4 +111,5 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="title_activity_in_game_home_screen">InGameHomeScreen</string>
 </resources>

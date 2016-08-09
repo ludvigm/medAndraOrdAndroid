@@ -23,16 +23,26 @@ public class PreGameSettingsActivity extends AppCompatActivity {
 
     public void onStartClicked(View view) {
 
-        RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup);
-        int index = rg.indexOfChild(findViewById(rg.getCheckedRadioButtonId()));
-        int numberOfPlayers = index+2;
+        try {
+            RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup);
+            int index = rg.indexOfChild(findViewById(rg.getCheckedRadioButtonId()));
+            int numberOfPlayers = index + 2;
 
-        Spinner diffSpinner = (Spinner) findViewById(R.id.difficulty_spinner);
-        int diff = diffSpinner.getSelectedItemPosition();
+            Spinner diffSpinner = (Spinner) findViewById(R.id.difficulty_spinner);
+            int diff = diffSpinner.getSelectedItemPosition();
 
-        Intent intent = new Intent(this,GameActivity.class);
-        intent.putExtra("numberOfPlayers",numberOfPlayers);
-        intent.putExtra("difficulty", diff);
-        startActivity(intent);
+            Spinner skipsSpinner = (Spinner) findViewById(R.id.skips_spinner);
+            int skips = Integer.valueOf( (String) skipsSpinner.getSelectedItem());
+
+            Intent intent = new Intent(this,InGameHomeScreen.class);
+            intent.putExtra("numberOfPlayers",numberOfPlayers);
+            intent.putExtra("difficulty", diff);
+            intent.putExtra("skips",skips);
+            startActivity(intent);
+
+        }catch(NullPointerException e) {
+            System.out.println("PreGameSettings onStartClicked nullpointer..");
+        }
+
     }
 }

@@ -5,130 +5,106 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
+    private ArrayList<String> words;
+    private TextView wordDisplay;
+    private TextView timerDisplay;
+    private int skips;
 
-    LinkedList<String> words;
-    LinkedList<Team> teams;
-    TextView wordDisplay;
-    TextView timerDisplay;
+    private int scoreAcquired;
+    private ArrayList<String> usedWords;
+
+    private Button passButton;
+    private Button nextButton;
+
+    private String nextWord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        Intent intent = getIntent();
-        int numberOfTeams = intent.getIntExtra("numberOfPlayers",2);
-        int diff = intent.getIntExtra("difficulty",2);
+        Intent i = getIntent();
+        words = i.getStringArrayListExtra("words");
+        skips = i.getIntExtra("skips",0);
 
-        System.out.println("players: " + numberOfTeams);
-        System.out.println("diff: " + diff);
-
+        nextButton = (Button)findViewById(R.id.nextButton);
+        if(skips>0) {
+            passButton = (Button)findViewById(R.id.passButton);
+            passButton.setEnabled(true);
+        }
 
         wordDisplay = (TextView) findViewById(R.id.wordDisplay);
         timerDisplay = (TextView) findViewById(R.id.timerDisplay);
+        usedWords = new ArrayList<>();
+        scoreAcquired = 0;
 
-        switch(diff) {
-            case 0: words = getWordsFromResources(R.array.easy_words);
-                break;
-            case 1: words = getWordsFromResources(R.array.default_words);
-                break;
-            case 2: words = getWordsFromResources(R.array.hard_words);
-                break;
-        }
-        Collections.shuffle(words);
-        teams = createTeams(numberOfTeams,0,false);
         start();
-
-    }
-
-    private LinkedList<String> getWordsFromResources(int id) {
-        return new LinkedList<>(Arrays.asList(getResources().getStringArray(id)));
     }
 
     private void start() {
 
-        displayNextWord();
+        displayNextWord(false);
 
-        new CountDownTimer(30000, 1000) {
-
+        new CountDownTimer(5000, 1000) {
             public void onTick(long millisUntilFinished) {
                 timerDisplay.setText(String.valueOf(millisUntilFinished / 1000));
-                //here you can have your logic to set text to edittext
             }
-
             public void onFinish() {
-                timerDisplay.setText("Time out!");
+                goBackToHomeScreen();
             }
-
         }.start();
-
-        System.out.println("after timer.");
-
     }
 
-
     public void nextButtonClicked(View view) {
-        //Give score.
-        displayNextWord();
+        scoreAcquired++;
+        displayNextWord(false);
     }
 
     public void passButtonClicked(View view) {
-        displayNextWord();
+        skips--;
+        if(skips == 0)
+            passButton.setEnabled(false);
+        displayNextWord(true);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_game, menu);
-        return true;
-    }
+    private void displayNextWord(boolean pass) {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        if(!pass)
+            usedWords.add(nextWord);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        if(!words.isEmpty()) {
+            nextWord = popWord();
+            wordDisplay.setText(nextWord);
 
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void displayNextWord() {
-
-        String word = words.pollFirst();
-        if(word!=null) {
-            wordDisplay.setText(word);
-        }
-        /*if(iterator.hasNext()) {
-            wordDisplay.setText(iterator.next());
         } else {
-            iterator = words.listIterator();
-            wordDisplay.setText(iterator.next());
-        }*/
+            try {
+                nextButton.setEnabled(false);
+                passButton.setEnabled(false);
+            }catch(NullPointerException e) {
+                System.out.println("button null..");
+            }
+            wordDisplay.setText("Somehow we ran out of words, sorry about that.");
+        }
     }
 
-    private LinkedList<Team> createTeams(int numberOfTeams, int skips, boolean customTeamNames) {
-        LinkedList<Team> teams = new LinkedList<>();
-        for(;numberOfTeams>0; numberOfTeams--) {
-            Team t = new Team("Team "+numberOfTeams,skips,0);
-            teams.addLast(t);
-        }
-        return teams;
+    private String popWord() {
+        String word = words.get(0);
+        words.remove(0);
+        return word;
+    }
+
+    private void goBackToHomeScreen() {
+        Intent i = new Intent(GameActivity.this,InGameHomeScreen.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        i.putStringArrayListExtra("usedWords",usedWords);
+        i.putExtra("scoreAcquired", scoreAcquired);
+        startActivity(i);
     }
 }

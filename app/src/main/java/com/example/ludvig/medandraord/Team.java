@@ -1,32 +1,31 @@
 package com.example.ludvig.medandraord;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by Ludvig on 8/8/2016.
  */
-public class Team {
+public class Team implements Serializable {
 
 
     private String teamName;
-    private int skipsLeft;
     private int score;
 
     public Team() {
 
     }
 
-    public Team(String name, int skips, int score) {
+    public Team(String name, int score) {
         teamName = name;
-        skipsLeft = skips;
         this.score = score;
     }
 
-    public void incrementScore() {
-        this.score++;
+    public void giveScore(int score) {
+        this.score +=score;
     }
-    public void decrementSkips() {
-        this.skipsLeft--;
-    }
-
 
     //getters setters
     public String getTeamName() {
@@ -37,14 +36,6 @@ public class Team {
         this.teamName = teamName;
     }
 
-    public int getSkipsLeft() {
-        return skipsLeft;
-    }
-
-    public void setSkipsLeft(int skipsLeft) {
-        this.skipsLeft = skipsLeft;
-    }
-
     public int getScore() {
         return score;
     }
@@ -52,12 +43,5 @@ public class Team {
     public void setScore(int score) {
         this.score = score;
     }
-
-
-
-
-
-
-
 
 }

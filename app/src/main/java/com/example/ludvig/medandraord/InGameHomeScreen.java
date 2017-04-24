@@ -19,7 +19,7 @@ public class InGameHomeScreen extends AppCompatActivity {
     int currentTeamIndex;
 
     int numberOfTeams;
-    int diff;
+    String wordListTableName;
     int skips;
 
     boolean resumeAfterOnCreateFlag = false;
@@ -29,35 +29,27 @@ public class InGameHomeScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_game_home_screen);
 
-            System.out.println("ONCREATE..");
-        if(savedInstanceState==null)
+        System.out.println("ONCREATE..");
+        if (savedInstanceState == null)
             System.out.println("savedinstance was null...");
 
-            resumeAfterOnCreateFlag = true;
-            currentTeamIndex = 0;
+        resumeAfterOnCreateFlag = true;
+        currentTeamIndex = 0;
 
-            Intent intent = getIntent();
-            numberOfTeams = intent.getIntExtra("numberOfPlayers", 2);
-            diff = intent.getIntExtra("difficulty", 2);
-            skips = intent.getIntExtra("skips", 0);
+        Intent intent = getIntent();
+        numberOfTeams = intent.getIntExtra("numberOfPlayers", 2);
+        wordListTableName = intent.getStringExtra("wordlist");
+        skips = intent.getIntExtra("skips", 0);
 
-            System.out.println("players: " + numberOfTeams);
-            System.out.println("diff: " + diff);
-            System.out.println("skips: " + skips);
+        System.out.println("players: " + numberOfTeams);
+        System.out.println("wordlist: " + wordListTableName);
+        System.out.println("skips: " + skips);
 
-            switch (diff) {
-                case 0:
-                    words = getWordsFromResources(R.array.easy_words);
-                    break;
-                case 1:
-                    words = getWordsFromResources(R.array.default_words);
-                    break;
-                case 2:
-                    words = getWordsFromResources(R.array.hard_words);
-                    break;
-            }
-            Collections.shuffle(words);
-            teams = createTeams(numberOfTeams, skips, false);
+        //GET WORDLIST FROM SQL
+        SQLiteHelper sql = new SQLiteHelper(this);
+        words = sql.getWordsFromTable(wordListTableName);
+        Collections.shuffle(words);
+        teams = createTeams(numberOfTeams, skips, false);
 
         drawHomeScreen();
     }
@@ -116,10 +108,10 @@ public class InGameHomeScreen extends AppCompatActivity {
         super.onResume();
         System.out.println("RESUME called..");
 
-        if(!resumeAfterOnCreateFlag) {
+        if (!resumeAfterOnCreateFlag) {
             System.out.println("in flag==false..");
             Intent intent = getIntent();
-            System.out.println(intent.getIntExtra("scoreAcquired",0));
+            System.out.println(intent.getIntExtra("scoreAcquired", 0));
             teams.get(currentTeamIndex).giveScore(intent.getIntExtra("scoreAcquired", 0));
             removeUsedWords(intent.getStringArrayListExtra("usedWords"));
 
@@ -138,17 +130,17 @@ public class InGameHomeScreen extends AppCompatActivity {
             if (!usedWords.isEmpty()) {
                 words.removeAll(usedWords);
             }
-        }catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             System.out.println("usedWords array null..");
         }
     }
 
     private ArrayList<Team> createTeams(int numberOfTeams, int skips, boolean customTeamNames) {
         ArrayList<Team> teams = new ArrayList<>();
-        if(!customTeamNames) {
+        if (!customTeamNames) {
             for (; numberOfTeams > 0; numberOfTeams--) {
-                Team t = new Team("Team " + numberOfTeams,0);
-                teams.add(0,t);
+                Team t = new Team("Team " + numberOfTeams, 0);
+                teams.add(0, t);
             }
         } else {
             //if user wants custom teamnames..
@@ -160,11 +152,11 @@ public class InGameHomeScreen extends AppCompatActivity {
     private void drawHomeScreen() {
         TableLayout table = (TableLayout) findViewById(R.id.inGameHomeScreen_tableLayout);
         table.removeAllViews();
-        for(Team t : teams) {
+        for (Team t : teams) {
             TextView name = new TextView(this);
             name.setText(t.getTeamName());
             TextView score = new TextView(this);
-            score.setText(""+t.getScore());
+            score.setText("" + t.getScore());
             TableRow row = new TableRow(this);
             row.addView(name);
             row.addView(score);
@@ -178,9 +170,9 @@ public class InGameHomeScreen extends AppCompatActivity {
 
     public void onStartClicked(View view) {
 
-        Intent intent = new Intent(this,GameActivity.class);
-        intent.putStringArrayListExtra("words",words);
-        intent.putExtra("skips",skips);
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putStringArrayListExtra("words", words);
+        intent.putExtra("skips", skips);
         startActivity(intent);
     }
 

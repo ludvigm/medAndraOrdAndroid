@@ -24,11 +24,21 @@
         <activity
             android:name=".PreGameSettingsActivity"
             android:label="@string/title_activity_pre_game_settings"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".InGameHomeScreen"
             android:label="@string/title_activity_in_game_home_screen"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".WordListMangementActivity"
+            android:label="WordListManagementActivity"
+            android:parentActivityName=".MainActivity"
+            ></activity>
+        <activity
+            android:name=".EditWordListActivity"
+            android:label="Edit Wordlist"
+            android:parentActivityName=".WordListMangementActivity"
+            ></activity>
     </application>
 
 </manifest>

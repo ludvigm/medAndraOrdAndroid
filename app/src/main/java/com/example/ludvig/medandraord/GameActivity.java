@@ -32,11 +32,11 @@ public class GameActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         words = i.getStringArrayListExtra("words");
-        skips = i.getIntExtra("skips",0);
+        skips = i.getIntExtra("skips", 0);
 
-        nextButton = (Button)findViewById(R.id.nextButton);
-        if(skips>0) {
-            passButton = (Button)findViewById(R.id.passButton);
+        nextButton = (Button) findViewById(R.id.nextButton);
+        if (skips > 0) {
+            passButton = (Button) findViewById(R.id.passButton);
             passButton.setEnabled(true);
         }
 
@@ -56,6 +56,7 @@ public class GameActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 timerDisplay.setText(String.valueOf(millisUntilFinished / 1000));
             }
+
             public void onFinish() {
                 goBackToHomeScreen();
             }
@@ -69,25 +70,25 @@ public class GameActivity extends AppCompatActivity {
 
     public void passButtonClicked(View view) {
         skips--;
-        if(skips == 0)
+        if (skips == 0)
             passButton.setEnabled(false);
         displayNextWord(true);
     }
 
     private void displayNextWord(boolean pass) {
 
-        if(!pass)
-            usedWords.add(nextWord);
 
-        if(!words.isEmpty()) {
+        if (!words.isEmpty()) {
             nextWord = popWord();
             wordDisplay.setText(nextWord);
+            if (!pass)
+                usedWords.add(nextWord);
 
         } else {
             try {
                 nextButton.setEnabled(false);
                 passButton.setEnabled(false);
-            }catch(NullPointerException e) {
+            } catch (NullPointerException e) {
                 System.out.println("button null..");
             }
             wordDisplay.setText("Somehow we ran out of words, sorry about that.");
@@ -101,9 +102,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void goBackToHomeScreen() {
-        Intent i = new Intent(GameActivity.this,InGameHomeScreen.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        i.putStringArrayListExtra("usedWords",usedWords);
+        Intent i = new Intent(GameActivity.this, InGameHomeScreen.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        i.putStringArrayListExtra("usedWords", usedWords);
         i.putExtra("scoreAcquired", scoreAcquired);
         startActivity(i);
     }

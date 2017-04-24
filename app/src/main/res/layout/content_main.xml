@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Placeholder Text"
+        android:text="Med Andra Ord"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -33,11 +33,11 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="Word Lists"
         android:id="@+id/button4"
         android:layout_marginTop="50dp"
         android:layout_below="@+id/button3"
         android:layout_centerHorizontal="true"
-        android:onClick="settingsButtonClicked"
+        android:onClick="manageWordListButtonClicked"
         />
 </RelativeLayout>

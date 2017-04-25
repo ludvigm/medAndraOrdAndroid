@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     public void playButtonClicked(View view) {
         Intent intent = new Intent(this,PreGameSettingsActivity.class);
         startActivity(intent);
-
     }
 
 }

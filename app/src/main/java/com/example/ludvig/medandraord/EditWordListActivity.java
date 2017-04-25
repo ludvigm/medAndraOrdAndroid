@@ -63,7 +63,7 @@ public class EditWordListActivity extends AppCompatActivity {
                 return true;
             case edit_word:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Enter a name for new list");
+                builder.setTitle("Enter new word");
 
                 final EditText input = new EditText(this);
                 input.setText(wordSelected);

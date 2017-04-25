@@ -2,11 +2,14 @@ package com.example.ludvig.medandraord;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 /**
@@ -41,9 +44,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public void createTable(String tablename, SQLiteDatabase db) {
-        String query = "CREATE TABLE IF NOT EXISTS " + tablename + " (" +
+
+
+        String query = "CREATE TABLE IF NOT EXISTS " + tablename +" (" +
                 "WORD TEXT PRIMARY KEY);";
-        db.execSQL(query);
+        try {
+            db.execSQL(query);
+        } catch(SQLException e) {
+
+        }
         System.out.println("CRETED TABLE " + tablename + "(UNLESS IT EXISTED)");
     }
 

@@ -5,6 +5,12 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_pre_game_settings">preGameSettings</string>
 
+    <string-array name="teams_spinneritems">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
     <string-array name="diff_spinneritems">
         <item>Easy</item>
         <item>Default</item>

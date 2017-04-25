@@ -14,69 +14,38 @@
     tools:showIn="@layout/activity_pre_game_settings">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/radios_linearlayout">
+        android:id="@+id/teams_linearlayout"
+        android:layout_marginTop="25dp">
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="Number of teams: "
-            android:layout_marginTop="12dp"
             />
 
 
-        <RadioGroup
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/radioGroup"
-            android:checkedButton="@+id/radioButton"
-            >
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
+        <Spinner
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButton"
-            android:button="@drawable/radio_two_teams"
-            />
-
-        <RadioButton
-            android:layout_width="wrap_content"
+            android:id="@+id/teams_spinner"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/radioButton2"
-            android:button="@drawable/radio_three_teams"
+            android:entries="@array/teams_spinneritems"
             />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/radioButton3"
-            android:button="@drawable/radio_four_teams"
-            />
-        </RadioGroup>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/radios_linearlayout"
+        android:layout_below="@+id/teams_linearlayout"
         android:id="@+id/difficulty_linearlayout"
         android:layout_marginTop="25dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select difficulty: "
+            android:text="Select list to play"
             />
-
-
         <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -84,7 +53,6 @@
             android:layout_weight="1"
             android:entries="@array/diff_spinneritems"
             />
-
     </LinearLayout>
 
     <LinearLayout

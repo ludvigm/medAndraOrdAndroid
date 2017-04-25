@@ -22,6 +22,7 @@ public class GameActivity extends AppCompatActivity {
 
     private Button passButton;
     private Button nextButton;
+    private CountDownTimer timer;
 
     private String nextWord;
 
@@ -52,7 +53,7 @@ public class GameActivity extends AppCompatActivity {
 
         displayNextWord(false);
 
-        new CountDownTimer(5000, 1000) {
+        timer = new CountDownTimer(5000, 1000) {
             public void onTick(long millisUntilFinished) {
                 timerDisplay.setText(String.valueOf(millisUntilFinished / 1000));
             }
@@ -106,6 +107,16 @@ public class GameActivity extends AppCompatActivity {
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         i.putStringArrayListExtra("usedWords", usedWords);
         i.putExtra("scoreAcquired", scoreAcquired);
+        scoreAcquired = 0;
         startActivity(i);
+    }
+
+    //Prevent a lot of wierd interactions with using back button while timer running...
+    @Override
+    public void onBackPressed(){
+        if(timer != null) {
+            timer.cancel();
+        }
+        goBackToHomeScreen();
     }
 }

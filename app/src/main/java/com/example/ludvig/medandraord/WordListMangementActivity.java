@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
-import android.text.method.DigitsKeyListener;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -76,19 +76,20 @@ public class WordListMangementActivity extends AppCompatActivity {
 
     public void newListButton(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater Li = LayoutInflater.from(this);
+        final EditText edittext = (EditText) Li.inflate(R.layout.new_list_input, null);
+        builder.setView(edittext);
         builder.setTitle("Enter a name for new list");
-
-        final EditText input = new EditText(this);
-        input.setKeyListener(DigitsKeyListener.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"));
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String name = input.getText().toString();
-                adapter.add(name);
-                createNewList(name);
+                String name = edittext.getText().toString();
+                if (name.replaceAll(" ", "").equals("") || name.equals("")) {
+                    Toast.makeText(WordListMangementActivity.this, "Name cannot be empty or contain only spaces", Toast.LENGTH_SHORT).show();
+                } else {
+                    createNewList(name);
+                }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -103,7 +104,9 @@ public class WordListMangementActivity extends AppCompatActivity {
 
     private void createNewList(String name) {
         SQLiteHelper sql = new SQLiteHelper(this);
-        sql.createTable(name, sql.getWritableDatabase());
+        boolean worked = sql.createTable(name, sql.getWritableDatabase());
+        if (worked)
+            adapter.add(name);
     }
 
     private void deleteList(String name) {

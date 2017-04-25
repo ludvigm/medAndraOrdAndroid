@@ -43,18 +43,16 @@ public class PreGameSettingsActivity extends AppCompatActivity {
     public void onStartClicked(View view) {
 
         try {
-            RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup);
-            int index = rg.indexOfChild(findViewById(rg.getCheckedRadioButtonId()));
-            int numberOfPlayers = index + 2;
+            Spinner teamsSpinner = (Spinner) findViewById(R.id.teams_spinner);
+            int teams = Integer.valueOf( (String) teamsSpinner.getSelectedItem());
 
             String wordlist = diffSpinner.getSelectedItem().toString();
-
 
             Spinner skipsSpinner = (Spinner) findViewById(R.id.skips_spinner);
             int skips = Integer.valueOf( (String) skipsSpinner.getSelectedItem());
 
             Intent intent = new Intent(this,InGameHomeScreen.class);
-            intent.putExtra("numberOfPlayers",numberOfPlayers);
+            intent.putExtra("numberOfTeams",teams);
             intent.putExtra("wordlist", wordlist);
             intent.putExtra("skips",skips);
             startActivity(intent);

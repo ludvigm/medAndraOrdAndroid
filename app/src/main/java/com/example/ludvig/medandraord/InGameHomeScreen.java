@@ -37,11 +37,11 @@ public class InGameHomeScreen extends AppCompatActivity {
         currentTeamIndex = 0;
 
         Intent intent = getIntent();
-        numberOfTeams = intent.getIntExtra("numberOfPlayers", 2);
+        numberOfTeams = intent.getIntExtra("numberOfTeams", 2);
         wordListTableName = intent.getStringExtra("wordlist");
         skips = intent.getIntExtra("skips", 0);
 
-        System.out.println("players: " + numberOfTeams);
+        System.out.println("Teams: " + numberOfTeams);
         System.out.println("wordlist: " + wordListTableName);
         System.out.println("skips: " + skips);
 

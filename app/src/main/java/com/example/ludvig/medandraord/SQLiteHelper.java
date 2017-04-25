@@ -43,17 +43,20 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         insertBulk("Hard", hardwords, db);
     }
 
-    public void createTable(String tablename, SQLiteDatabase db) {
+    public boolean createTable(String tablename, SQLiteDatabase db) {
 
 
-        String query = "CREATE TABLE IF NOT EXISTS " + tablename +" (" +
+        String query = "CREATE TABLE IF NOT EXISTS " + tablename + " (" +
                 "WORD TEXT PRIMARY KEY);";
         try {
             db.execSQL(query);
-        } catch(SQLException e) {
-
+            System.out.println("CRETED TABLE " + tablename + "(UNLESS IT EXISTED)");
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to create table: " + tablename);
+            return false;
         }
-        System.out.println("CRETED TABLE " + tablename + "(UNLESS IT EXISTED)");
     }
 
     public void deleteTable(String tablename) {
@@ -64,14 +67,20 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public void insertWord(String table, String word) {
         SQLiteDatabase db = getWritableDatabase();
-        String query = "INSERT OR IGNORE INTO " + table + "(WORD) VALUES ('" + word + "');";
-        db.execSQL(query);
+        String query = "INSERT OR IGNORE INTO " + table + "(WORD) VALUES (?);";
+        SQLiteStatement statement = db.compileStatement(query);
+        statement.bindString(1,word);
+        statement.executeInsert();
     }
 
     public void updateWord(String table, String oldWord, String newWord) {
         SQLiteDatabase db = getWritableDatabase();
-        String query = "UPDATE " + table + " SET WORD = '" + newWord + "' WHERE WORD = '" + oldWord + "';";
-        db.execSQL(query);
+        String query = "UPDATE " + table + " SET WORD=? WHERE WORD=?;";
+        SQLiteStatement statement = db.compileStatement(query);
+        statement.bindString(1,newWord);
+        statement.bindString(2,oldWord);
+        int rowsAff = statement.executeUpdateDelete();
+        System.out.println("Update affected " + rowsAff + " rows.");
     }
 
     public void insertBulk(String table, String[] words, SQLiteDatabase db) {
@@ -114,7 +123,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public void removeWordFromTable(String table, String word) {
-        String query = "DELETE FROM " + table + " WHERE word='" + word+"';";
+        String query = "DELETE FROM " + table + " WHERE word='" + word + "';";
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(query);
         System.out.println(word + " deleted from " + table);

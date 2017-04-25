@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -44,9 +46,9 @@ public class EditWordListActivity extends AppCompatActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu,v,menuInfo);
-        menu.add(Menu.NONE, del_word,0,"Remove");
-        menu.add(Menu.NONE, edit_word,1,"Edit");
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(Menu.NONE, del_word, 0, "Remove");
+        menu.add(Menu.NONE, edit_word, 1, "Edit");
     }
 
     final static int del_word = 1;
@@ -63,22 +65,25 @@ public class EditWordListActivity extends AppCompatActivity {
                 return true;
             case edit_word:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Enter new word");
 
-                final EditText input = new EditText(this);
-                input.setText(wordSelected);
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
+                LayoutInflater Li = LayoutInflater.from(this);
+                final EditText edittext = (EditText) Li.inflate(R.layout.new_word_input, null);
+                builder.setView(edittext);
+                builder.setTitle("Enter a name for new list");
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String wordToAdd = input.getText().toString();
-                        wordToAdd = fixCase(wordToAdd);
-                        int insertindex = adapter.getPosition(wordSelected);
-                        adapter.remove(wordSelected);
-                        adapter.insert(wordToAdd,insertindex);
-                        updateWordInDB(wordSelected, wordToAdd);
+                        String wordToEdit = edittext.getText().toString();
+                        if (wordToEdit.replaceAll(" ", "").equals("") || wordToEdit.equals("")) {
+                            Toast.makeText(EditWordListActivity.this, "Name cannot be empty or contain only spaces", Toast.LENGTH_SHORT).show();
+                        } else {
+                            wordToEdit = fixCase(wordToEdit);
+                            int insertindex = adapter.getPosition(wordSelected);
+                            adapter.remove(wordSelected);
+                            adapter.insert(wordToEdit, insertindex);
+                            updateWordInDB(wordSelected, wordToEdit);
+                        }
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -96,22 +101,23 @@ public class EditWordListActivity extends AppCompatActivity {
 
     public void addWord(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater Li = LayoutInflater.from(this);
+        final EditText edittext = (EditText) Li.inflate(R.layout.new_word_input, null);
+        builder.setView(edittext);
         builder.setTitle("Enter a name for new list");
-
-// Set up the input
-        final EditText input = new EditText(this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
 // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String wordToAdd = input.getText().toString();
-                wordToAdd = fixCase(wordToAdd);
-                adapter.add(wordToAdd);
-                addWordToDB(wordToAdd);
+                String wordToAdd = edittext.getText().toString();
+                if (wordToAdd.replaceAll(" ", "").equals("") || wordToAdd.equals("")) {
+                    Toast.makeText(EditWordListActivity.this, "Name cannot be empty or contain only spaces", Toast.LENGTH_SHORT).show();
+                } else {
+                    wordToAdd = fixCase(wordToAdd);
+                    adapter.add(wordToAdd);
+                    addWordToDB(wordToAdd);
+                }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -126,24 +132,24 @@ public class EditWordListActivity extends AppCompatActivity {
 
     private void removeWordFromDB(String word) {
         SQLiteHelper sql = new SQLiteHelper(this);
-        sql.removeWordFromTable(tableName,word);
+        sql.removeWordFromTable(tableName, word);
     }
 
     private void addWordToDB(String word) {
         SQLiteHelper sql = new SQLiteHelper(this);
-        sql.insertWord(tableName,word);
+        sql.insertWord(tableName, word);
     }
 
     private void updateWordInDB(String oldWord, String newWord) {
         SQLiteHelper sql = new SQLiteHelper(this);
-        sql.updateWord(tableName,oldWord,newWord);
+        sql.updateWord(tableName, oldWord, newWord);
     }
 
     private String fixCase(String word) {
-        String capitalfirst = word.substring(0,1).toUpperCase();
-        String rest = word.substring(1,word.length()).toLowerCase();
+        String capitalfirst = word.substring(0, 1).toUpperCase();
+        String rest = word.substring(1, word.length()).toLowerCase();
         String res = capitalfirst.concat(rest);
-        System.out.println(word  + " was fixed to " + res);
+        System.out.println(word + " was fixed to " + res);
         return res;
     }
 

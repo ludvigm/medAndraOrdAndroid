@@ -69,7 +69,7 @@ public class EditWordListActivity extends AppCompatActivity {
                 LayoutInflater Li = LayoutInflater.from(this);
                 final EditText edittext = (EditText) Li.inflate(R.layout.new_word_input, null);
                 builder.setView(edittext);
-                builder.setTitle("Enter a name for new list");
+                builder.setTitle("Edit word");
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -105,7 +105,7 @@ public class EditWordListActivity extends AppCompatActivity {
         LayoutInflater Li = LayoutInflater.from(this);
         final EditText edittext = (EditText) Li.inflate(R.layout.new_word_input, null);
         builder.setView(edittext);
-        builder.setTitle("Enter a name for new list");
+        builder.setTitle("Enter new word");
 // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override

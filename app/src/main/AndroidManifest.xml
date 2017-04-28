@@ -29,6 +29,8 @@
         <activity
             android:name=".InGameHomeScreen"
             android:label="@string/title_activity_in_game_home_screen"
+            android:parentActivityName=".MainActivity"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".WordListMangementActivity"
@@ -40,6 +42,9 @@
             android:label="Edit Wordlist"
             android:parentActivityName=".WordListMangementActivity"
             />
+
+        <service android:name=".ForegroundService" android:enabled="true" />
+
     </application>
 
 </manifest>

@@ -51,10 +51,18 @@ public class PreGameSettingsActivity extends AppCompatActivity {
             Spinner skipsSpinner = (Spinner) findViewById(R.id.skips_spinner);
             int skips = Integer.valueOf( (String) skipsSpinner.getSelectedItem());
 
+            Spinner scorelimitSpinner = (Spinner) findViewById(R.id.scorelimit_spinner);
+            int scorelimit = Integer.valueOf( (String) scorelimitSpinner.getSelectedItem());
+
+            Spinner timelimitSpinner = (Spinner) findViewById(R.id.timelimit_spinner);
+            int timelimit = Integer.valueOf( (String) timelimitSpinner.getSelectedItem());
+
             Intent intent = new Intent(this,InGameHomeScreen.class);
             intent.putExtra("numberOfTeams",teams);
             intent.putExtra("wordlist", wordlist);
             intent.putExtra("skips",skips);
+            intent.putExtra("scorelimit",scorelimit);
+            intent.putExtra("timelimit", timelimit);
             startActivity(intent);
 
         }catch(NullPointerException e) {

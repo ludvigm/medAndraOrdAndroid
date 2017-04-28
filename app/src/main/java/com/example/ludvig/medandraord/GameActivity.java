@@ -51,7 +51,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void start() {
 
-        displayNextWord(false);
+        displayNextWord();
 
         timer = new CountDownTimer(5000, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -66,25 +66,22 @@ public class GameActivity extends AppCompatActivity {
 
     public void nextButtonClicked(View view) {
         scoreAcquired++;
-        displayNextWord(false);
+        usedWords.add(nextWord);
+        displayNextWord();
     }
 
     public void passButtonClicked(View view) {
         skips--;
         if (skips == 0)
             passButton.setEnabled(false);
-        displayNextWord(true);
+        displayNextWord();
     }
 
-    private void displayNextWord(boolean pass) {
-
-
+    private void displayNextWord() {
         if (!words.isEmpty()) {
             nextWord = popWord();
             wordDisplay.setText(nextWord);
-            if (!pass)
-                usedWords.add(nextWord);
-
+            usedWords.add(nextWord);
         } else {
             try {
                 nextButton.setEnabled(false);

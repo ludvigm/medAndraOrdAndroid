@@ -13,67 +13,76 @@
     tools:showIn="@layout/activity_in_game_home_screen">
 
     <TextView
+        android:id="@+id/textView_teamnext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
         android:text=""
-        android:id="@+id/textView_teamnext"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="140dp"
-        android:stretchColumns="*"
         android:id="@+id/table_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="25dp"
-        >
+        android:layout_marginTop="140dp"
+        android:stretchColumns="*">
 
-    <TableRow>
-        <TextView
-            android:text="Team Name"
-            android:textSize="24sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <TextView
-            android:text="Score"
-            android:textSize="24sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="0dp"
-            />
-    </TableRow>
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Team Name"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="0dp"
+                android:text="Score"
+                android:textSize="24sp" />
+        </TableRow>
     </TableLayout>
 
     <TableLayout
+        android:id="@+id/inGameHomeScreen_tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="*"
-        android:id="@+id/inGameHomeScreen_tableLayout"
-        android:layout_below="@+id/table_head"
-        android:layout_marginTop="10dp"
         android:layout_alignParentLeft="true"
+        android:layout_below="@+id/table_head"
         android:layout_marginLeft="30dp"
-        >
-    </TableLayout>
-
+        android:layout_marginTop="10dp"
+        android:stretchColumns="*" />
 
 
     <Button
+        android:id="@+id/ingamehomescreen_startbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start!"
-        android:id="@+id/button6"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
-        android:onClick="onStartClicked"/>
+        android:onClick="onStartClicked"
+        android:text="Start!" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inGameHomeScreen_tableLayout"
+        android:gravity="center"
+        android:layout_marginTop="100dp">
+        <TextView
+            android:id="@+id/lastround_textview"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last Round!" />
+    </LinearLayout>
 
 
 </RelativeLayout>

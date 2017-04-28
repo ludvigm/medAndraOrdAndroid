@@ -16,7 +16,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/pregame_headertext"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Game Settings"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/teams_linearlayout"
+        android:layout_below="@id/pregame_headertext"
         android:layout_marginTop="25dp">
         <TextView
             android:layout_width="wrap_content"
@@ -51,14 +64,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/difficulty_spinner"
             android:layout_weight="1"
-            android:entries="@array/diff_spinneritems"
             />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:id="@+id/skips_linearlayout"
         android:layout_below="@+id/difficulty_linearlayout"
         android:layout_marginTop="25dp">
         <TextView
@@ -77,6 +89,44 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scorelimit_linearlayout"
+        android:layout_below="@+id/skips_linearlayout"
+        android:layout_marginTop="25dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score Limit: "
+            />
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/scorelimit_spinner"
+            android:layout_weight="1"
+            android:entries="@array/scorelimit_spinneritems"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scorelimit_linearlayout"
+        android:layout_marginTop="25dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Round Time Limit: "
+            />
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/timelimit_spinner"
+            android:layout_weight="1"
+            android:entries="@array/scorelimit_spinneritems"
+            />
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"

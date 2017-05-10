@@ -2,17 +2,23 @@ package com.example.ludvig.medandraord;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,40 +98,14 @@ public class InGameHomeScreen extends AppCompatActivity {
     };
 
 
-   /* @Override
-    protected void onSaveInstanceState(Bundle state) {
-        System.out.println("onsave is called..");
-        super.onSaveInstanceState(state);
-        state.putInt("numberOfTeams",numberOfTeams);
-        state.putInt("diff",diff);
-        state.putInt("skips",skips);
-        state.putSerializable("teams", teams);
-        state.putStringArrayList("words",words);
-        state.putInt("currentTeamIndex",currentTeamIndex);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        // Always call the superclass so it can restore the view hierarchy
-        super.onRestoreInstanceState(savedInstanceState);
-
-        // Restore state members from saved instance
-        System.out.println("OnRestore..");
-        numberOfTeams = savedInstanceState.getInt("numberOfTeams");
-        diff = savedInstanceState.getInt("diff");
-        skips = savedInstanceState.getInt("skips");
-        words = savedInstanceState.getStringArrayList("words");
-        teams = (ArrayList<Team>) savedInstanceState.getSerializable("teams");
-        currentTeamIndex = savedInstanceState.getInt("currentTeamIndex");
-    }*/
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         if(connection != null) {
             unbindService(connection);
             System.out.println("service unbound.");
-            service.stopService();
+            Intent i = new Intent(this, ForegroundService.class);
+            stopService(i);
         }
         System.out.println("ONDESTROY was called..");
     }
@@ -146,7 +126,26 @@ public class InGameHomeScreen extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         System.out.println("Back press in ingamehomescreen");
-        NavUtils.navigateUpFromSameTask(this);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm");
+        builder.setMessage("Are you sure? Going back will cause the current game to be over!");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                exitGame();
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
@@ -239,10 +238,41 @@ public class InGameHomeScreen extends AppCompatActivity {
         }
 
         if (gameover) {
+
+            //set winnertext in background.
             TextView nextTeamText = (TextView) findViewById(R.id.textView_teamnext);
             Team team = getWinner();
             lastRoundTextView.setVisibility(View.INVISIBLE);
             nextTeamText.setText(team.getTeamName() + " Wins!");
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            //Inflate popup
+            LayoutInflater Li = LayoutInflater.from(this);
+            final RelativeLayout popup = (RelativeLayout) Li.inflate(R.layout.game_over_popup, null);
+            Button home = (Button) popup.findViewById(R.id.winpopup_homebtn);
+            Button share = (Button) popup.findViewById(R.id.winpopup_sharebtn);
+            builder.setView(popup);
+            builder.setTitle("Game Over!");
+            home.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Go back to home screen, discaring all game data etc.
+                    exitGame();
+                }
+            });
+            share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Share on media etc
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, "I'm being sent!!");
+                    startActivity(Intent.createChooser(share, "Share Text"));
+
+                }
+            });
+            builder.show();
         } else {
             TextView nextTeamText = (TextView) findViewById(R.id.textView_teamnext);
             nextTeamText.setText(teams.get(currentTeamIndex).getTeamName() + "'s turn");
@@ -263,6 +293,12 @@ public class InGameHomeScreen extends AppCompatActivity {
         intent.putStringArrayListExtra("words", words);
         intent.putExtra("skips", skips);
         startActivity(intent);
+    }
+
+    private void exitGame() {
+        Intent mainActivity = new Intent(InGameHomeScreen.this, MainActivity.class);
+        startActivity(mainActivity);
+        finish();
     }
 
 }

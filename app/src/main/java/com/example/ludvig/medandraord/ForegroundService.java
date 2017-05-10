@@ -32,7 +32,6 @@ public class ForegroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        System.out.println(intent.getAction());
         System.out.println("onstart");
         return START_STICKY;
     }
@@ -62,6 +61,7 @@ public class ForegroundService extends Service {
     }
 
     public void stopService() {
+        System.out.println("stopservice in service");
         stopForeground(true);
     }
 }

@@ -66,12 +66,32 @@ public class WordListMangementActivity extends AppCompatActivity {
         String listSelected = (String) adapter.getItem(info.position);
         switch (item.getItemId()) {
             case del_list:
-                adapter.remove(listSelected);
-                deleteList(listSelected);
+                promptAreYouSureDelete(listSelected);
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    private void promptAreYouSureDelete(final String listSelected) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm");
+        builder.setMessage("Are you sure? The list will be lost forever!");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                adapter.remove(listSelected);
+                deleteList(listSelected);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public void newListButton(View view) {

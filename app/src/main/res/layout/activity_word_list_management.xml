@@ -11,7 +11,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="All word-lists are shown below. Select one to manage it!"
+            android:text="Select a word-list to view/edit, hold to delete!"
             android:gravity="center"/>
     </LinearLayout>
     <ListView

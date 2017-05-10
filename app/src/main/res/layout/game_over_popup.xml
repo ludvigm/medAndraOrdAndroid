@@ -1,0 +1,33 @@
+<RelativeLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/winpopup_text"
+        android:text="exampletext"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/winpopup_sharebtn"
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/winpopup_text"
+        android:layout_toStartOf="@+id/winpopup_text"
+        android:text="Share!"/>
+
+    <Button
+        android:id="@+id/winpopup_homebtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/winpopup_sharebtn"
+        android:layout_alignBottom="@+id/winpopup_sharebtn"
+        android:layout_toEndOf="@+id/winpopup_text"
+        android:text="Home"/>
+
+
+</RelativeLayout>
+

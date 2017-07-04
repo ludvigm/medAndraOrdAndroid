@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:background="@color/colorBack"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/orangeDetail"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mergelists"
+            style="@style/headerText"
+            android:id="@+id/merge_list_title"
+            />
+    </LinearLayout>
+
+    <TextView
+        style="@style/normalText"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:text="@string/selectliststomerge"
+        android:layout_marginTop="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <Spinner
+            android:id="@+id/merge_list_spinner1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:entries="@array/skips_spinneritems" />
+
+        <Spinner
+            android:id="@+id/merge_list_spinner2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:entries="@array/skips_spinneritems" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        >
+        <Button
+            android:layout_height="wrap_content"
+            android:id="@+id/merge_list_decline"
+            android:text="@string/cancel"
+            android:layout_marginEnd="50dp"
+
+            style="@style/mySmallerButton"
+            />
+
+        <Button
+            android:id="@+id/merge_list_accept"
+            android:layout_height="wrap_content"
+            android:text="@string/merge"
+
+            style="@style/mySmallerButton"
+            />
+    </LinearLayout>
+
+</LinearLayout>

@@ -3,5 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:digits="abcdefghijklmnopqrstuvwxyzåäöABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ "
     android:inputType="text"
-    android:hint="Enter list name..">
+    android:hint="@string/enterlistname"
+    android:background="@color/colorBack">
 </EditText>

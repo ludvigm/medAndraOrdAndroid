@@ -1,32 +1,48 @@
 <RelativeLayout android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/winpopup_text"
-        android:text="exampletext"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp" />
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorBack">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/winpopup_sharebtn"
-        android:layout_marginTop="26dp"
-        android:layout_below="@+id/winpopup_text"
-        android:layout_toStartOf="@+id/winpopup_text"
-        android:text="Share!"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/orangeDetail"
+        android:gravity="center"
+        android:id="@+id/popuptitlecontainer">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/headerText"
+            android:id="@+id/popuptitletext"
+            />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/winpopup_homebtn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/winpopup_sharebtn"
-        android:layout_alignBottom="@+id/winpopup_sharebtn"
-        android:layout_toEndOf="@+id/winpopup_text"
-        android:text="Home"/>
+        android:layout_below="@id/popuptitlecontainer"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        >
+        <Button
+            android:layout_height="wrap_content"
+            android:id="@+id/winpopup_sharebtn"
+            android:text="@string/share"
+            android:layout_marginEnd="50dp"
+
+            style="@style/mySmallerButton"
+            />
+
+        <Button
+            android:id="@+id/winpopup_homebtn"
+            android:layout_height="wrap_content"
+            android:text="@string/home"
+
+            style="@style/mySmallerButton"
+            />
+    </LinearLayout>
+
 
 
 </RelativeLayout>

@@ -4,48 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBack"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="64dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.ludvig.medandraord.InGameHomeScreen"
     tools:showIn="@layout/activity_in_game_home_screen">
 
     <TextView
         android:id="@+id/textView_teamnext"
+        style="@style/headerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:text=""
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="" />
 
     <TableLayout
         android:id="@+id/table_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="25dp"
         android:layout_marginTop="140dp"
+        android:gravity="center"
         android:stretchColumns="*">
 
         <TableRow>
-
             <TextView
+                style="@style/smallerHeaderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Team Name"
-                android:textSize="24sp" />
+                android:layout_gravity="center"
+                android:text="@string/teamname" />
 
             <TextView
+                style="@style/smallerHeaderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="0dp"
-                android:text="Score"
-                android:textSize="24sp" />
+                android:layout_gravity="center"
+                android:text="@string/score" />
         </TableRow>
     </TableLayout>
 
@@ -53,36 +53,37 @@
         android:id="@+id/inGameHomeScreen_tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/table_head"
-        android:layout_marginLeft="30dp"
         android:layout_marginTop="10dp"
-        android:stretchColumns="*" />
-
+        android:gravity="center"
+        android:stretchColumns="*">
+    </TableLayout>
 
     <Button
         android:id="@+id/ingamehomescreen_startbutton"
+        style="@style/myButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:onClick="onStartClicked"
-        android:text="Start!" />
+
+        android:text="@string/start"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/inGameHomeScreen_tableLayout"
-        android:gravity="center"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="100dp"
+        android:gravity="center">
+
         <TextView
             android:id="@+id/lastround_textview"
-            android:visibility="invisible"
+            style="@style/normalText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Last Round!" />
+            android:text="@string/lastround"
+            android:visibility="invisible" />
     </LinearLayout>
-
-
 </RelativeLayout>

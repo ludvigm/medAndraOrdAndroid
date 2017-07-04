@@ -1,17 +1,10 @@
 package com.example.ludvig.medandraord;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -33,7 +26,7 @@ public class PreGameSettingsActivity extends AppCompatActivity {
         ArrayList<String> tableNames = sql.getTableNames();
         System.out.println(tableNames);
         diffSpinner = (Spinner) findViewById(R.id.difficulty_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,tableNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,tableNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         if(diffSpinner != null) {
             diffSpinner.setAdapter(adapter);

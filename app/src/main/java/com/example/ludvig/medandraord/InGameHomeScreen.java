@@ -7,24 +7,24 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Locale;
 
 public class InGameHomeScreen extends AppCompatActivity {
+
+    private final int reqCode = 1;
+    AlertDialog dialog = null;
 
     //Settings
     String wordListTableName;
@@ -74,7 +74,7 @@ public class InGameHomeScreen extends AppCompatActivity {
         SQLiteHelper sql = new SQLiteHelper(this);
         words = sql.getWordsFromTable(wordListTableName);
         Collections.shuffle(words);
-        teams = createTeams(numberOfTeams, skips, false);
+        teams = createTeams(numberOfTeams);
 
         //Service up
         System.out.println("Service up?");
@@ -101,7 +101,7 @@ public class InGameHomeScreen extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(connection != null) {
+        if (connection != null) {
             unbindService(connection);
             System.out.println("service unbound.");
             Intent i = new Intent(this, ForegroundService.class);
@@ -149,6 +149,16 @@ public class InGameHomeScreen extends AppCompatActivity {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            //back from share
+            exitGame();
+        } else {
+            System.out.println("in else reqcode != 1");
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         System.out.println("RESUME called..");
@@ -164,6 +174,9 @@ public class InGameHomeScreen extends AppCompatActivity {
                 //Give team score..
                 Team currTeam = teams.get(currentTeamIndex);
                 currTeam.giveScore(intent.getIntExtra("scoreAcquired", 0));
+
+                //Update notification?
+                service.updateNotification(getLeaderString());
 
                 //If team's score is >= scorelimit
                 if (currTeam.getScore() >= scoreLimit) {
@@ -193,6 +206,11 @@ public class InGameHomeScreen extends AppCompatActivity {
         }
     }
 
+    private String getLeaderString() {
+        Team leader = getLeaderTeam();
+        return leader.getTeamName() + " is currently in the lead with " + leader.getScore() + " points!";
+    }
+
     private void gameOver() {
         startButton.setEnabled(false);
         drawHomeScreen(true);
@@ -209,56 +227,61 @@ public class InGameHomeScreen extends AppCompatActivity {
         }
     }
 
-    private ArrayList<Team> createTeams(int numberOfTeams, int skips, boolean customTeamNames) {
+    private ArrayList<Team> createTeams(int numberOfTeams) {
         ArrayList<Team> teams = new ArrayList<>();
-        if (!customTeamNames) {
-            for (; numberOfTeams > 0; numberOfTeams--) {
-                Team t = new Team("Team " + numberOfTeams, 0);
-                teams.add(0, t);
-            }
-        } else {
-            //if user wants custom teamnames..
+        for (; numberOfTeams > 0; numberOfTeams--) {
+            Team t = new Team("Lag " + numberOfTeams, 0);
+            teams.add(0, t);
         }
-
         return teams;
     }
 
     private void drawHomeScreen(boolean gameover) {
         TableLayout table = (TableLayout) findViewById(R.id.inGameHomeScreen_tableLayout);
-        table.removeAllViews();
-        for (Team t : teams) {
-            TextView name = new TextView(this);
-            name.setText(t.getTeamName());
-            TextView score = new TextView(this);
-            score.setText("" + t.getScore());
-            TableRow row = new TableRow(this);
-            row.addView(name);
-            row.addView(score);
-            table.addView(row);
+        LayoutInflater Li = LayoutInflater.from(this);
+
+        if (table != null) {
+            table.removeAllViews();
+            for (Team t : teams) {
+                TextView name = (TextView) Li.inflate(R.layout.team_text_view, null);
+                name.setText(t.getTeamName());
+                TextView score = (TextView) Li.inflate(R.layout.team_text_view, null);
+                score.setText(String.format(Locale.ENGLISH, "%d", t.getScore()));
+                TableRow row = new TableRow(this);
+                row.addView(name);
+                row.addView(score);
+                table.addView(row);
+            }
         }
 
         if (gameover) {
 
             //set winnertext in background.
             TextView nextTeamText = (TextView) findViewById(R.id.textView_teamnext);
-            Team team = getWinner();
+            Team team = getLeaderTeam();
             lastRoundTextView.setVisibility(View.INVISIBLE);
-            nextTeamText.setText(team.getTeamName() + " Wins!");
+            String winnertext = team.getTeamName() + " Wins!";
+            if (nextTeamText != null) {
+                nextTeamText.setText(winnertext);
+            }
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             //Inflate popup
-            LayoutInflater Li = LayoutInflater.from(this);
             final RelativeLayout popup = (RelativeLayout) Li.inflate(R.layout.game_over_popup, null);
             Button home = (Button) popup.findViewById(R.id.winpopup_homebtn);
             Button share = (Button) popup.findViewById(R.id.winpopup_sharebtn);
+
+            TextView title = (TextView) popup.findViewById(R.id.popuptitletext);
+            title.setText(winnertext);
+
             builder.setView(popup);
-            builder.setTitle("Game Over!");
+
             home.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //Go back to home screen, discaring all game data etc.
                     exitGame();
+                    dialog.dismiss();
                 }
             });
             share.setOnClickListener(new View.OnClickListener() {
@@ -268,18 +291,23 @@ public class InGameHomeScreen extends AppCompatActivity {
                     Intent share = new Intent(Intent.ACTION_SEND);
                     share.setType("text/plain");
                     share.putExtra(Intent.EXTRA_TEXT, "I'm being sent!!");
-                    startActivity(Intent.createChooser(share, "Share Text"));
+                    share.putExtra("requestCode", reqCode);
+                    startActivityForResult(Intent.createChooser(share, "Share Text"), reqCode);
 
+                    dialog.dismiss();
                 }
             });
-            builder.show();
+            dialog = builder.create();
+            dialog.show();
         } else {
             TextView nextTeamText = (TextView) findViewById(R.id.textView_teamnext);
-            nextTeamText.setText(teams.get(currentTeamIndex).getTeamName() + "'s turn");
+            if (nextTeamText != null) {
+                nextTeamText.setText(String.format(Locale.ENGLISH, "%s's turn", teams.get(currentTeamIndex).getTeamName()));
+            }
         }
     }
 
-    private Team getWinner() {
+    private Team getLeaderTeam() {
         Team highest = teams.get(0);
         for (Team t : teams.subList(1, teams.size())) {
             if (t.getScore() > highest.getScore())
@@ -297,6 +325,7 @@ public class InGameHomeScreen extends AppCompatActivity {
 
     private void exitGame() {
         Intent mainActivity = new Intent(InGameHomeScreen.this, MainActivity.class);
+        mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainActivity);
         finish();
     }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,12 +18,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-/**
- * Created by Ludde on 2017-04-20.
- */
 public class EditWordListActivity extends AppCompatActivity {
 
-    ArrayAdapter adapter;
+    ArrayAdapter<String> adapter;
     String tableName;
 
     @Override
@@ -36,9 +32,15 @@ public class EditWordListActivity extends AppCompatActivity {
         tableName = intent.getStringExtra("tablename");
         ArrayList<String> words = sql.getWordsFromTable(tableName);
 
-        ListView listview = (ListView) findViewById(R.id.listview_single_table_wordlist);
+        final ListView listview = (ListView) findViewById(R.id.listview_single_table_wordlist);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, words);
         if (listview != null) {
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    view.showContextMenu();
+                }
+            });
             listview.setAdapter(adapter);
             registerForContextMenu(listview);
         }
@@ -57,7 +59,7 @@ public class EditWordListActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        final String wordSelected = (String) adapter.getItem(info.position);
+        final String wordSelected = adapter.getItem(info.position);
         switch (item.getItemId()) {
             case del_word:
                 adapter.remove(wordSelected);
@@ -105,7 +107,7 @@ public class EditWordListActivity extends AppCompatActivity {
         LayoutInflater Li = LayoutInflater.from(this);
         final EditText edittext = (EditText) Li.inflate(R.layout.new_word_input, null);
         builder.setView(edittext);
-        builder.setTitle("Enter new word");
+        builder.setTitle("Add word");
 // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override

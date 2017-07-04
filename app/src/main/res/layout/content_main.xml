@@ -1,43 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.ludvig.medandraord.MainActivity"
-    tools:showIn="@layout/activity_main">
-
+    tools:showIn="@layout/activity_main"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/colorBack">
 
     <TextView
+        android:id="@+id/textView"
+        style="@style/headerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Med Andra Ord"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp" />
+        android:text="@string/gametitle"
+
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Play"
         android:id="@+id/button3"
-        android:layout_marginTop="100dp"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
+        style="@style/myButton"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="75dp"
         android:onClick="playButtonClicked"
-        />
+
+        android:text="@string/play" />
 
     <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Word Lists"
         android:id="@+id/button4"
+        style="@style/myButton"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:layout_below="@+id/button3"
-        android:layout_centerHorizontal="true"
         android:onClick="manageWordListButtonClicked"
-        />
-</RelativeLayout>
+
+        android:text="@string/wordlists" />
+</LinearLayout>

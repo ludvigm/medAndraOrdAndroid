@@ -12,19 +12,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-/**
- * Created by Ludde on 2017-04-20.
- */
 public class WordListMangementActivity extends AppCompatActivity {
 
-
-    ArrayAdapter adapter;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> tableNames;
+    AlertDialog dialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,38 +33,46 @@ public class WordListMangementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_word_list_management);
 
         SQLiteHelper sql = new SQLiteHelper(this);
-        ArrayList<String> tablenames = sql.getTableNames();
+        tableNames = sql.getTableNames();
         ListView listview = (ListView) findViewById(R.id.listview_all_wordlists);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tablenames);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tableNames);
 
         if (listview != null) {
+
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String selectedItem = (String) parent.getItemAtPosition(position);
+                    Intent intent = new Intent(parent.getContext(), EditWordListActivity.class);
+                    intent.putExtra("tablename", selectedItem);
+                    startActivity(intent);
+                }
+            });
+
             listview.setAdapter(adapter);
             registerForContextMenu(listview);
         }
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = (String) parent.getItemAtPosition(position);
-                Intent intent = new Intent(parent.getContext(), EditWordListActivity.class);
-                intent.putExtra("tablename", selectedItem);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+
+        //Disable delete functionality for the "standard" lists that comes with the app.
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        String selectedItem = adapter.getItem(info.position);
         menu.add(Menu.NONE, del_list, 0, "Remove");
+        if (SQLiteHelper.defaultListNames.contains(selectedItem)) {
+            menu.getItem(0).setEnabled(false);
+        }
     }
 
-    final static int del_list = 1;
 
+    final static int del_list = 1;
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        String listSelected = (String) adapter.getItem(info.position);
+        String listSelected = adapter.getItem(info.position);
         switch (item.getItemId()) {
             case del_list:
                 promptAreYouSureDelete(listSelected);
@@ -100,7 +109,7 @@ public class WordListMangementActivity extends AppCompatActivity {
         LayoutInflater Li = LayoutInflater.from(this);
         final EditText edittext = (EditText) Li.inflate(R.layout.new_list_input, null);
         builder.setView(edittext);
-        builder.setTitle("Enter a name for new list");
+        builder.setTitle("New list");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -121,6 +130,47 @@ public class WordListMangementActivity extends AppCompatActivity {
         builder.show();
     }
 
+    public void mergeListsButton(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater Li = LayoutInflater.from(this);
+        final LinearLayout popup = (LinearLayout) Li.inflate(R.layout.merge_lists_popup, null);
+
+        Button accept = (Button) popup.findViewById(R.id.merge_list_accept);
+        Button decline = (Button) popup.findViewById(R.id.merge_list_decline);
+
+        //Spinners get same adapter used to list the existing word-lists.
+        final Spinner spinner1 = (Spinner) popup.findViewById(R.id.merge_list_spinner1);
+        spinner1.setAdapter(adapter);
+        final Spinner spinner2 = (Spinner) popup.findViewById(R.id.merge_list_spinner2);
+        spinner2.setAdapter(adapter);
+
+        builder.setView(popup);
+
+        accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Merge lists
+                String list1 = (String) spinner1.getSelectedItem();
+                String list2 = (String) spinner2.getSelectedItem();
+                if (list1.equals(list2)) {
+                    Toast.makeText(popup.getContext(), "Cannot merge list with itself!", Toast.LENGTH_SHORT).show();
+                } else {
+                    mergeLists(list1, list2);
+                    dialog.dismiss();
+                }
+            }
+        });
+        decline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Canceled
+                dialog.dismiss();
+            }
+        });
+        dialog = builder.create();
+        dialog.show();
+    }
 
     private void createNewList(String name) {
         SQLiteHelper sql = new SQLiteHelper(this);
@@ -133,5 +183,11 @@ public class WordListMangementActivity extends AppCompatActivity {
         SQLiteHelper sql = new SQLiteHelper(this);
         sql.deleteTable(name);
 
+    }
+
+    private void mergeLists(String list1, String list2) {
+        SQLiteHelper sql = new SQLiteHelper(this);
+        sql.mergeTables(list1, list2);
+        adapter.add(list1 + "" + list2);
     }
 }

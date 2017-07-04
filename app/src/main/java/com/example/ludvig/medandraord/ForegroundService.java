@@ -1,13 +1,16 @@
 package com.example.ludvig.medandraord;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
+import android.graphics.BitmapFactory;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
-import android.widget.Toast;
 
 public class ForegroundService extends Service {
     final int ONGOING_NOTIFICATION_ID = 1;
@@ -17,9 +20,9 @@ public class ForegroundService extends Service {
     @Override
     public void onCreate() {
         System.out.println("onCreate in service");
-        startForeground(ONGOING_NOTIFICATION_ID, getNotification());
+        startForeground(ONGOING_NOTIFICATION_ID, getNotification(""));
 
-        if(binder == null) {
+        if (binder == null) {
             binder = new MyBinder();
         }
     }
@@ -36,12 +39,23 @@ public class ForegroundService extends Service {
         return START_STICKY;
     }
 
-    private Notification getNotification() {
+
+    @TargetApi(23)
+    private Notification getNotification(String text) {
         Notification.Builder builder = new Notification.Builder(this);
         builder.setOngoing(false)
                 .setAutoCancel(false)
-                .setContentText("Med Andra Ord")
-                .setSmallIcon(R.mipmap.ic_launcher);
+                .setContentTitle("Med Andra Ord - Game i progress!")
+                .setSmallIcon(R.drawable.thirdicon)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.thirdicon));
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            builder.setColor(getResources().getColor(R.color.colorBack, null));
+        }
+
+        if (text != null) {
+            builder.setContentText(text);
+        }
 
         Intent notificationIntent = new Intent(this, InGameHomeScreen.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -54,15 +68,19 @@ public class ForegroundService extends Service {
         return builder.build();
     }
 
-    public class MyBinder extends Binder {
+    public void updateNotification(String text) {
+        Notification notification = getNotification(text);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(ONGOING_NOTIFICATION_ID, notification);
+
+    }
+
+    class MyBinder extends Binder {
         ForegroundService getService() {
             return ForegroundService.this;
         }
     }
 
-    public void stopService() {
-        System.out.println("stopservice in service");
-        stopForeground(true);
-    }
 }
 

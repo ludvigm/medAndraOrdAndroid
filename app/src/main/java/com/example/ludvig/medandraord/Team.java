@@ -1,14 +1,8 @@
 package com.example.ludvig.medandraord;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
-/**
- * Created by Ludvig on 8/8/2016.
- */
-public class Team implements Serializable {
+class Team implements Serializable {
 
 
     private String teamName;
@@ -18,17 +12,17 @@ public class Team implements Serializable {
 
     }
 
-    public Team(String name, int score) {
+    Team(String name, int score) {
         teamName = name;
         this.score = score;
     }
 
-    public void giveScore(int score) {
-        this.score +=score;
+    void giveScore(int score) {
+        this.score += score;
     }
 
     //getters setters
-    public String getTeamName() {
+    String getTeamName() {
         return teamName;
     }
 
@@ -36,7 +30,7 @@ public class Team implements Serializable {
         this.teamName = teamName;
     }
 
-    public int getScore() {
+    int getScore() {
         return score;
     }
 

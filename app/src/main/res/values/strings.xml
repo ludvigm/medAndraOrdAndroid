@@ -3,7 +3,46 @@
     <string name="action_settings">Settings</string>
 
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_pre_game_settings">preGameSettings</string>
+    <string name="title_activity_pre_game_settings"></string>
+
+    <!-- In-app texts/labels/words in Swedish  -->
+
+    <string name="gametitle">Med Andra Ord</string>
+    <string name="play">Spela</string>
+    <string name="wordlists">Ordlistor</string>
+    <string name="teamname">Lag</string>
+    <string name="score">Poäng</string>
+    <string name="lastround">Sista rundan!</string>
+
+    <string name="pass">Pass</string>
+    <string name="next">Nästa</string>
+
+    <string name="outofwords">Orden tog tyävrr slut!</string>
+    <string name="enterword">Ange ett ord..</string>
+    <string name="enterlistname">Ange ett namn..</string>
+    <string name="mergelists">Sammanfoga Listor</string>
+    <string name="newlist">Ny Lista</string>
+    <string name="addword">Lägg till ord</string>
+    <string name="editwordlist">Redigera Lista</string>
+    <string name="selectliststomerge">Välj listor att sammanfoga</string>
+    <string name="cancel">Avbryt</string>
+    <string name="merge">Sammanfoga</string>
+    <string name="share">Dela!</string>
+    <string name="home">Hem</string>
+
+    <string name="settings">Inställningar</string>
+    <string name="numberofteams">Antal lag</string>
+    <string name="selectlisttoplay">Välj en lista att spela</string>
+    <string name="numberofskips">Antal skips</string>
+    <string name="scorelimit">Poänggräns</string>
+    <string name="timelimit">Tidsgräns per runda</string>
+    <string name="start">Starta!</string>
+
+
+
+
+
+
 
     <string-array name="teams_spinneritems">
         <item>2</item>

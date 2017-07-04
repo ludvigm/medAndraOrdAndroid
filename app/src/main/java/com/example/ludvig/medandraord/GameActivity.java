@@ -89,7 +89,7 @@ public class GameActivity extends AppCompatActivity {
             } catch (NullPointerException e) {
                 System.out.println("button null..");
             }
-            wordDisplay.setText("Somehow we ran out of words, sorry about that.");
+            wordDisplay.setText(R.string.outofwords);
         }
     }
 

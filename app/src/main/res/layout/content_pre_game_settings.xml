@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBack"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -14,128 +15,149 @@
     tools:showIn="@layout/activity_pre_game_settings">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
         android:id="@+id/pregame_headertext"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Game Settings"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-    </LinearLayout>
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/teams_linearlayout"
-        android:layout_below="@id/pregame_headertext"
-        android:layout_marginTop="25dp">
+        android:gravity="center">
+
         <TextView
+            style="@style/headerText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Number of teams: "
-            />
+            android:text="@string/settings" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/teams_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pregame_headertext"
+        android:layout_marginTop="25dp"
+        >
 
-        <Spinner
+        <TextView
+            style="@style/normalText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/teams_spinner"
-            android:layout_weight="1"
-            android:entries="@array/teams_spinneritems"
+            android:layout_weight="0.75"
+            android:text="@string/numberofteams"
+            android:layout_marginStart="25dp"
             />
 
+        <Spinner
+            android:id="@+id/teams_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="0.25"
+            android:entries="@array/teams_spinneritems" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/difficulty_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/teams_linearlayout"
-        android:id="@+id/difficulty_linearlayout"
-        android:layout_marginTop="25dp">
+        android:layout_marginTop="35dp">
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select list to play"
-            />
-        <Spinner
+            style="@style/normalText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:layout_marginStart="25dp"
+            android:text="@string/selectlisttoplay" />
+
+        <Spinner
             android:id="@+id/difficulty_spinner"
-            android:layout_weight="1"
-            />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="0.25" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/skips_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/difficulty_linearlayout"
-        android:layout_marginTop="25dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Number of skips: "
-            />
+        android:layout_marginTop="35dp">
 
-        <Spinner
+        <TextView
+            style="@style/normalText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:layout_marginStart="25dp"
+            android:text="@string/numberofskips" />
+
+        <Spinner
             android:id="@+id/skips_spinner"
-            android:layout_weight="1"
-            android:entries="@array/skips_spinneritems"
-            />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="0.25"
+            android:entries="@array/skips_spinneritems" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/scorelimit_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scorelimit_linearlayout"
         android:layout_below="@+id/skips_linearlayout"
-        android:layout_marginTop="25dp">
+        android:layout_marginTop="35dp">
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Score Limit: "
-            />
-        <Spinner
+            style="@style/normalText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:layout_marginStart="25dp"
+            android:text="@string/scorelimit" />
+
+        <Spinner
             android:id="@+id/scorelimit_spinner"
-            android:layout_weight="1"
-            android:entries="@array/scorelimit_spinneritems"
-            />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="0.25"
+            android:entries="@array/scorelimit_spinneritems" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/scorelimit_linearlayout"
-        android:layout_marginTop="25dp">
+        android:layout_marginTop="35dp">
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Round Time Limit: "
-            />
-        <Spinner
+            style="@style/normalText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:layout_marginStart="25dp"
+            android:text="@string/timelimit" />
+
+        <Spinner
             android:id="@+id/timelimit_spinner"
-            android:layout_weight="1"
-            android:entries="@array/scorelimit_spinneritems"
-            />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="0.25"
+            android:entries="@array/scorelimit_spinneritems" />
     </LinearLayout>
 
     <Button
+        android:id="@+id/button5"
+        style="@style/myButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ok, start!"
-        android:id="@+id/button5"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
-        android:onClick="onStartClicked"/>
+        android:onClick="onStartClicked"
+
+        android:text="@string/start" />
 
 </RelativeLayout>
